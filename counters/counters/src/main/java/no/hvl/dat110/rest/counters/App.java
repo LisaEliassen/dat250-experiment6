@@ -46,8 +46,28 @@ public class App {
         	counters = gson.fromJson(req.body(), Counters.class);
         
             return counters.toJson();
-        	
+
         });
+
+		put("/counters/red", (req,res) -> {
+
+			Gson gson = new Gson();
+
+			counters = gson.fromJson(req.params("red"), Counters.class);
+
+			return counters.toJson();
+
+		});
+
+		put("/counters/green", (req,res) -> {
+
+			Gson gson = new Gson();
+
+			counters = gson.fromJson(req.params("green"), Counters.class);
+
+			return counters.toJson();
+
+		});
     }
     
 }

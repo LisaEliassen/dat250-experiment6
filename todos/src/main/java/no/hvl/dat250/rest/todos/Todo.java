@@ -4,8 +4,8 @@ import java.util.Objects;
 
 public class Todo {
     private final Long id;
-    private final String summary;
-    private final String description;
+    private String summary;
+    private String description;
 
     public Todo(Long id, String summary, String description) {
         this.id = id;
@@ -30,6 +30,13 @@ public class Todo {
 
     public String getDescription() {
         return description;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     // Do not change equals and hashcode!
