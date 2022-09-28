@@ -12,64 +12,98 @@ public class TodoAPI {
         if (args.length > 0) {
             port(Integer.parseInt(args[0]));
         } else {
-            port(8080);
+            port(6000);
         }
 
         after((req, res) -> res.type("application/json"));
 
         // TODO: Implement API, such that the testcases succeed.
+        // ^ DONE
 
-        TodoDAO todoDAO = new TodoDAO();
+        final TodoDAO todoDAO = new TodoDAO();
         Gson gson = new Gson();
 
         // Create/POST:
-        post("/Todo", (request, response) -> {
+        post("/todos", (request, response) -> {
+            response.type("application/json");
 
-            return null;
+            Todo todo = gson.fromJson(request.body(), Todo.class);
+            todo = todoDAO.create(todo);
+
+            return gson.toJson(todo);
         });
 
         // Read/GET, one todo by id:
-        get("/Todo/:id", (request, response) -> {
+        get("/todos/:id", (request, response) -> {
             response.type("application/json");
+            String id = request.params(":id");
 
-            Long id = Long.valueOf(request.params(":id"));
-            Todo todo = todoDAO.find(Long.valueOf(id));
-            if (todo != null) {
-                return gson.toJson(new StandardResponse(
-                        StatusResponse.SUCCESS, new Gson().toJson(todo)));
+            if (isNumber(id)) { // check if id is a number
+                Todo todo = todoDAO.find(Long.valueOf(id));
+                if (todo != null) {
+                    return gson.toJson(todo);
+                }
+                return String.format("Todo with the id  \"%s\" not found!", id);
             }
-            return gson.toJson(new StandardResponse(
-                    StatusResponse.ERROR, new Gson().toJson("Todo is not found!")));
+            else {
+                return String.format("The id \"%s\" is not a number!", id);
+            }
         });
+
         // Read/GET, all todos:
-        get("/Todo", (request, response) -> {
+        get("/todos", (request, response) -> {
             response.type("application/json");
 
-            return gson.toJson(new StandardResponse(
-                    StatusResponse.SUCCESS, new Gson().toJson(todoDAO.all())));
+            return gson.toJson(todoDAO.all());
         });
 
         // Update/PUT:
-        put("/Todo/:id", (request, response) -> {
+        put("/todos/:id", (request, response) -> {
             response.type("application/json");
+            String id = request.params(":id");
 
-            Long id = Long.valueOf(request.params(":id"));
-            Todo todo = todoDAO.find(Long.valueOf(id));
-            if (todo != null) {
-                String summary = request.queryParams("summary");
-                String description = request.queryParams("description");
-                todoDAO.update(id, summary, description);
-                return gson.toJson(new StandardResponse(
-                        StatusResponse.SUCCESS, new Gson().toJson(todo)));
+            // check if id is a number
+            if (isNumber(id)) {
+                Todo editedTodo = gson.fromJson(request.body(), Todo.class);
+                editedTodo = todoDAO.update(editedTodo, Long.valueOf(id));
+
+                if (editedTodo != null) {
+                    return gson.toJson(editedTodo);
+                }
+                else {
+                    return gson.toJson("Todo not found or error in edit");
+                }
             }
             else {
-                return gson.toJson(new StandardResponse(
-                        StatusResponse.ERROR, new Gson().toJson("Todo is not found or error in update")));
+                return String.format("The id \"%s\" is not a number!", id);
             }
         });
 
-        // Delete/DELETE::
-
+        // Delete/DELETE:
+        delete("/todos/:id", (request, response) -> {
+            response.type("application/json");
+            String id = request.params(":id");
+            if(isNumber(id)) {
+                Todo todo = todoDAO.remove(Long.valueOf(id));
+                if (todo != null) {
+                    return gson.toJson("Success!");
+                }
+                else {
+                    return String.format("Todo with the id  \"%s\" not found!", id);
+                }
+            }
+            else {
+                return String.format("The id \"%s\" is not a number!", id);
+            }
+        });
     }
 
+    public static boolean isNumber(String s) {
+        for (char c : s.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

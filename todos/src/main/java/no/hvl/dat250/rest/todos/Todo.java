@@ -3,7 +3,7 @@ package no.hvl.dat250.rest.todos;
 import java.util.Objects;
 
 public class Todo {
-    private final Long id;
+    private Long id;
     private String summary;
     private String description;
 
@@ -12,7 +12,6 @@ public class Todo {
         this.summary = summary;
         this.description = description;
     }
-
     public Todo(String summary, String description) {
         this(null, summary, description);
     }
@@ -32,6 +31,9 @@ public class Todo {
         return description;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
     public void setSummary(String summary) {
         this.summary = summary;
     }
@@ -52,5 +54,8 @@ public class Todo {
     @Override
     public int hashCode() {
         return Objects.hash(id, summary, description);
+    }
+
+    public void setId(long id) {
     }
 }

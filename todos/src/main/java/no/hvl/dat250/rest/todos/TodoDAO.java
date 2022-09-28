@@ -3,7 +3,6 @@ package no.hvl.dat250.rest.todos;
 import java.util.Map;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.*;
 
 public class TodoDAO {
     private final Map<Long, Todo> todos = new HashMap<>();
@@ -12,12 +11,15 @@ public class TodoDAO {
     public TodoDAO() {
         this.id_generator = new AtomicLong();
     }
-    public void create(String summary, String description) {
-        Long id = this.id_generator.incrementAndGet();
-        Todo todo = new Todo(summary, description);
-        this.todos.put(id, todo);
-    }
 
+    public Todo create(Todo todo) {
+        if(todo.getId() == null) {
+            Long ID = this.id_generator.incrementAndGet();
+            todo.setId(ID);
+        }
+        this.add(todo);
+        return todo;
+    }
     public void add(Todo todo) {
         this.todos.put(todo.getId(), todo);
     }
@@ -26,26 +28,23 @@ public class TodoDAO {
         return this.todos.get(id);
     }
 
-    public Todo update(Long id, String summary, String description) {
-        if (find(id) != null) {
-            if (summary != null) {
-                find(id).setSummary(summary);
-            }
-            if (description != null) {
-                find(id).setDescription((description));
-            }
-        }
-        return find(id);
+    public Collection<Todo> all() {
+        return todos.values();
     }
 
-    public Todo remove(String id) {
-        Todo todo = this.todos.remove(id);
-
+    public Todo update(Todo todo, Long id) {
+        if (find(id) != null && todos.containsKey(id)) {
+            Todo updateTodo = find(id);
+            updateTodo.setDescription(todo.getDescription());
+            updateTodo.setSummary(todo.getSummary());
+            return updateTodo;
+        }
+        else {
+            return null;
+        }
+    }
+    public Todo remove(Long id) {
+        Todo todo = todos.remove(id);
         return todo;
     }
-
-    public Map<Long,Todo> all() {
-        return this.todos;
-    }
-
 }
