@@ -12,7 +12,7 @@ public class TodoAPI {
         if (args.length > 0) {
             port(Integer.parseInt(args[0]));
         } else {
-            port(6000);
+            port(8080);
         }
 
         after((req, res) -> res.type("application/json"));
