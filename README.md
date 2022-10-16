@@ -7,7 +7,7 @@ I have tried to use the Rest-API from experiment 4, but I'm not sure if I have d
 I don't know TypeScript so this has been a very hard experiment/assignment, but I have tried my best.
 
 ## How to run:
-Navigate to .\dat250-experiment6\TodoApp, and run 'ng serve' to start the Angular application.
+Navigate to .\dat250-experiment6\TodoApp, and run the 'ng serve' in the terminal to start the Angular application.
 
 ## Comments:
 Like I mentioned before, I tried to use the Rest-API from experiment 4, but I'm not sure if I have done it correctly.
