@@ -39,11 +39,4 @@ export class TodosComponent implements OnInit {
     this.todoService.getTodos()
       .subscribe(todos => this.todos = todos);
   }
-
-  genId(todos: Todo[]): number {
-    if (todos.length > 0) {
-      return todos.length;
-    }
-    return 1;
-  }
 }

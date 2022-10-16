@@ -10,7 +10,7 @@ import { MessageService } from './message.service';
 @Injectable({ providedIn: 'root' })
 export class TodoService {
 
-  private todosUrl = 'localhost:8080/todos';  // URL to web api
+  private todosUrl = 'localhost:8080/todos'; 
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -44,14 +44,6 @@ export class TodoService {
     return this.http.delete<Todo>(url, this.httpOptions).pipe(
       tap(_ => this.log(`deleted todo id=${id}`)),
       catchError(this.handleError<Todo>('deleteTodo'))
-    );
-  }
-
-  /** PUT: update the todo on the server */
-  updateTodo(hero: Todo): Observable<any> {
-    return this.http.put(this.todosUrl, hero, this.httpOptions).pipe(
-      tap(_ => this.log(`updated todo id=${hero.id}`)),
-      catchError(this.handleError<any>('updateTodo'))
     );
   }
 

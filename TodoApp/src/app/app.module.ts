@@ -10,7 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { TodosComponent } from './todos/todos.component';
-import { MessagesComponent } from './messages/messages.component';
+import { MessagesComponent} from "./messages/messages.component";
 
 @NgModule({
   imports: [
